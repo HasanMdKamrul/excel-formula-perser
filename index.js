@@ -11,17 +11,17 @@ const options = {
   licenseKey: "gpl-v3",
 };
 
-const data = [
-  [1, 2, 3, 4, 5],
-  [1, 10, 3, 4, "=SUM(A1:E1)"],
-  [1, 2, "=B2*1.3", 4, 5],
-];
+app.post("/", (req, res) => {
+  const payload = req.body;
 
-const hyperInstance = hyper.HyperFormula.buildFromArray(data, options);
+  const { formula } = payload;
 
-const resArr = [];
+  const data = JSON.parse(formula);
+  const hyperInstance = hyper.HyperFormula.buildFromArray(data, options);
 
-app.get("/", (req, res) => {
+  console.log(data);
+  const resArr = [];
+
   for (let index = 0; index < data.length; index++) {
     const row = data[index];
 
@@ -33,6 +33,7 @@ app.get("/", (req, res) => {
           row: data.indexOf(row),
           sheet: 0,
         });
+
         resArr.push(mySum);
       } else {
         resArr.push(col);
@@ -40,7 +41,12 @@ app.get("/", (req, res) => {
     }
   }
 
-  res.json(resArr);
+  res.send({
+    success: true,
+    data: resArr,
+  });
+
+  //   res.json(JSON.stringify(resArr));
 });
 
 app.listen(port, () => console.log(`${port} listen`));
