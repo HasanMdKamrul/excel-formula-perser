@@ -15,7 +15,7 @@ function App() {
     };
 
     try {
-      const response = await fetch("http://localhost:15000/", {
+      const response = await fetch("http://localhost:4000/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
