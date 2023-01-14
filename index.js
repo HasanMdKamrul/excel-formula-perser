@@ -21,29 +21,26 @@ const hyperInstance = hyper.HyperFormula.buildFromArray(data, options);
 
 const resArr = [];
 
-for (let index = 0; index < data.length; index++) {
-  const row = data[index];
+app.get("/", (req, res) => {
+  for (let index = 0; index < data.length; index++) {
+    const row = data[index];
 
-  for (let index = 0; index < row.length; index++) {
-    const col = row[index];
-    if (typeof col !== "number") {
-      //   console.log("row", data.indexOf(row));
-      //   console.log(row.indexOf(col));
-      let mySum = hyperInstance.getCellValue({
-        col: row.indexOf(col),
-        row: data.indexOf(row),
-        sheet: 0,
-      });
-      resArr.push(mySum);
-      //   console.log("sum", mySum);
+    for (let index = 0; index < row.length; index++) {
+      const col = row[index];
+      if (typeof col !== "number") {
+        let mySum = hyperInstance.getCellValue({
+          col: row.indexOf(col),
+          row: data.indexOf(row),
+          sheet: 0,
+        });
+        resArr.push(mySum);
+      } else {
+        resArr.push(col);
+      }
     }
   }
-}
 
-console.log(...resArr);
-
-app.get("/", (req, res) => {
-  res.json("hello");
+  res.json(resArr);
 });
 
 app.listen(port, () => console.log(`${port} listen`));
