@@ -17,36 +17,25 @@ app.post("/", (req, res) => {
   const { formula } = payload;
 
   const data = JSON.parse(formula);
-  const hyperInstance = hyper.HyperFormula.buildFromArray(data, options);
 
-  console.log(data);
-  const resArr = [];
-
-  for (let index = 0; index < data.length; index++) {
-    const row = data[index];
-
-    for (let index = 0; index < row.length; index++) {
-      const col = row[index];
-      if (typeof col !== "number") {
-        let mySum = hyperInstance.getCellValue({
+  const result = data.map((row) =>
+    row.map((col) => {
+      if (typeof col === "number") {
+        return col;
+      } else {
+        return hyper.HyperFormula.buildFromArray(data, options).getCellValue({
           col: row.indexOf(col),
           row: data.indexOf(row),
           sheet: 0,
         });
-
-        resArr.push(mySum);
-      } else {
-        resArr.push(col);
       }
-    }
-  }
+    })
+  );
 
   res.send({
     success: true,
-    data: resArr,
+    data: result,
   });
-
-  //   res.json(JSON.stringify(resArr));
 });
 
 app.listen(port, () => console.log(`${port} listen`));

@@ -3,7 +3,7 @@ import "./App.css";
 
 function App() {
   const [formula, setFormula] = useState("");
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ function App() {
       });
 
       const data = await response.json();
-
+      console.log(data);
       if (data.success) {
         setResult(data.data);
       }
